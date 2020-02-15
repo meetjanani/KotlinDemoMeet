@@ -1,8 +1,9 @@
 package `in`.meetjanani.kotlindemomeet
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.GridLayoutManager
+import android.os.Handler
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
@@ -13,6 +14,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        shimmerLayout.startShimmerAnimation()
+
+        Handler().postDelayed({
+            shimmerLayout.stopShimmerAnimation()
+            shimmerLayout.visibility = View.GONE
+            setValues()
+        }, 5000)
+
+
+
+
+    }
+
+    fun setValues() {
         val gson = Gson()
         val jsonString = """{"charityMedia": [
 
@@ -120,7 +135,9 @@ class MainActivity : AppCompatActivity() {
         val testModel = gson.fromJson(jsonString, MediaModel::class.java)
 
         val adapter = MediaAdapter(testModel.charityMedia, this)
-        recycler_view_Categories_List.setAdapter(adapter)
-        recycler_view_Categories_List.setLayoutManager(LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL , false))
+        recycler_view_Categories_List.adapter = adapter
+        recycler_view_Categories_List.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
     }
+
 }
